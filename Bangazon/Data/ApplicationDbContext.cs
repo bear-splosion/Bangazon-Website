@@ -191,6 +191,7 @@ namespace Bangazon.Data {
                 {
                     OrderId = 1,
                     UserId = user.Id,
+                    PaymentTypeId = null
                 }
             );
 
