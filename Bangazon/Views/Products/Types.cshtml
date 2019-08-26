@@ -13,7 +13,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.ProductId)
+                @*@Html.DisplayNameFor(model => model.Products)*@
             </th>
             <th></th>
         </tr>
@@ -30,6 +30,14 @@
                 <a asp-action="Delete" asp-route-id="@item.ProductTypeId">Delete</a>*@
             </td>
         </tr>
+    foreach (var productItem in item.Products)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => productItem.Title)
+            </td>
+        </tr>
+    }
 }
     </tbody>
 </table>

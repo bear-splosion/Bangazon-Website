@@ -13,9 +13,7 @@ namespace Bangazon.Models.ProductTypeViewModels
 
         public int ProductId { get; set; }
 
-        //public List<Product> Products { get; set; }
-
-        //public List<ProductType> ProductTypes { get; set; }
+        public List<ProductType> ProductTypes { get; set; }
 
         public virtual List<GroupedProducts> GroupedProducts { get; set; }
     }
