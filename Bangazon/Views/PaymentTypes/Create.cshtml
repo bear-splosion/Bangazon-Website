@@ -1,12 +1,11 @@
 ﻿@model Bangazon.Models.PaymentType
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "New Payment Type";
 }
 
-<h1>Create</h1>
+<h1>@ViewData["Title"]</h1>
 
-<h4>PaymentType</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -26,7 +25,7 @@
                 <input asp-for="UserId" type="hidden" class ="form-control" asp-items="ViewBag.UserId">
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Submit" class="btn btn-primary" />
             </div>
         </form>
     </div>

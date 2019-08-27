@@ -4,10 +4,10 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Payment Types</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Add Payment Option</a>
 </p>
 <table class="table">
     <thead>
@@ -43,8 +43,6 @@
                 @Html.DisplayFor(modelItem => item.User.FullName)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.PaymentTypeId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.PaymentTypeId">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.PaymentTypeId">Delete</a>
             </td>
         </tr>
