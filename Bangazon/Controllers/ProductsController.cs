@@ -8,22 +8,33 @@ using Microsoft.EntityFrameworkCore;
 using Bangazon.Data;
 using Bangazon.Models;
 using Bangazon.Models.ProductTypeViewModels;
+using Microsoft.AspNetCore.Identity;
 
 namespace Bangazon.Controllers
 {
     public class ProductsController : Controller
     {
+        // Heather changed the dependency injection with Adam's help for getting current user
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ProductsController(ApplicationDbContext context)
+        public ProductsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
+        // End
 
         // GET: Products
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Product.Include(p => p.ProductType).Include(p => p.User);
+            // Heather added GetUserAsync method for getting current user
+            var user = await GetUserAsync();
+            // Heather updated this section below for getting current user
+            var applicationDbContext = _context.Product
+                .Where(p => p.UserId == user.Id)
+                .Include(p => p.User)
+                .Include(p => p.ProductType);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -48,10 +59,24 @@ namespace Bangazon.Controllers
         }
 
         // GET: Products/Create
+        // Heather worked on the Create for New Products
         public IActionResult Create()
         {
-            ViewData["ProductTypeId"] = new SelectList(_context.ProductType, "ProductTypeId", "Label");
-            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id");
+            //var productTypeList = new SelectList(_context.ProductType, "ProductTypeId", "Label");
+            var productTypeList = _context.ProductType.ToList();
+            var productTypeSelectList = productTypeList.Select(type => new SelectListItem
+            {
+                Text = type.Label,
+                Value = type.ProductTypeId.ToString()
+            }).ToList();
+            productTypeSelectList.Insert(0, new SelectListItem
+            {
+                Text = "Choose Category...",
+                Value = ""
+            });
+
+            ViewData["ProductTypeId"] = productTypeSelectList;
+
             return View();
         }
 
@@ -60,16 +85,23 @@ namespace Bangazon.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductId,DateCreated,Description,Title,Price,Quantity,UserId,City,ImagePath,Active,ProductTypeId")] Product product)
+        public async Task<IActionResult> Create([Bind("ProductId,Description,Title,Price,Quantity,UserId,City,ImagePath,Active,ProductTypeId")] Product product)
         {
+            var user = await GetUserAsync();
+            ModelState.Remove("User");
+            ModelState.Remove("UserId");
+
             if (ModelState.IsValid)
             {
-                _context.Add(product);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                    product.UserId = user.Id;
+
+                    _context.Add(product);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
             }
-            ViewData["ProductTypeId"] = new SelectList(_context.ProductType, "ProductTypeId", "Label", product.ProductTypeId);
-            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", product.UserId);
+            var productTypeList = new SelectList(_context.ProductType, "ProductTypeId", "Label", product.ProductTypeId);
+            
+            ViewData["ProductTypeId"] = productTypeList;
             return View(product);
         }
 
@@ -186,5 +218,12 @@ namespace Bangazon.Controllers
 
             return View(model);
         }
+
+        // Heather added this method for getting the user with the CREATE methods
+        private Task<ApplicationUser> GetUserAsync()
+        {
+            return _userManager.GetUserAsync(HttpContext.User);
+        }
+        // End
     }
 }
