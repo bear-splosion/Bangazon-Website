@@ -35,16 +35,20 @@ namespace Bangazon.Controllers
                 return NotFound();
             }
 
+
+
             var quantityCount = @"SELECT COUNT(p.ProductId) AS ProductCount 
                                 FROM Product p 
                                 JOIN OrderProduct op 
                                 ON p.ProductId = op.ProductId
                                 GROUP BY p.ProductId
                                 WHERE p.ProductId = @id";
+
             var product = await _context.Product
                 .Include(p => p.ProductType)
                 .Include(p => p.User)
                 .FirstOrDefaultAsync(m => m.ProductId == id);
+
 
             if (product == null)
             {
