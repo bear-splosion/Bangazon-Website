@@ -4,14 +4,16 @@ using Bangazon.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Bangazon.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190826195133_addProductTypeViewModel")]
+    partial class addProductTypeViewModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -83,7 +85,7 @@ namespace Bangazon.Migrations
                         {
                             Id = "00000000-ffff-ffff-ffff-ffffffffffff",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "e9a9d834-0ef6-4a5e-a7b6-cd66a4e87c2a",
+                            ConcurrencyStamp = "20322e61-8117-42b3-9a01-38b1905c20ce",
                             Email = "admin@admin.com",
                             EmailConfirmed = true,
                             FirstName = "Admina",
@@ -91,7 +93,7 @@ namespace Bangazon.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAENMIT1UBeyL3ObXw1FQvukbzniMD6CqKjzoA291pNJ3m+u1WSNomILNLiDZwQyHodQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEBFtI7ikMpvB2AUxBVGu6NmcIYlVw1Z/25h4VQnrUdef/yuyX7AcY26KhpKOU4skwQ==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "7f434309-a4d9-48e9-9ebb-8803db794577",
                             StreetAddress = "123 Infinity Way",
@@ -350,13 +352,7 @@ namespace Bangazon.Migrations
                         .IsRequired()
                         .HasMaxLength(255);
 
-                    b.Property<int>("ProductId");
-
-                    b.Property<int?>("ProductTypeViewModelProductTypeId");
-
                     b.HasKey("ProductTypeId");
-
-                    b.HasIndex("ProductTypeViewModelProductTypeId");
 
                     b.ToTable("ProductType");
 
@@ -364,62 +360,52 @@ namespace Bangazon.Migrations
                         new
                         {
                             ProductTypeId = 1,
-                            Label = "Sporting Goods",
-                            ProductId = 0
+                            Label = "Sporting Goods"
                         },
                         new
                         {
                             ProductTypeId = 2,
-                            Label = "Appliances",
-                            ProductId = 0
+                            Label = "Appliances"
                         },
                         new
                         {
                             ProductTypeId = 3,
-                            Label = "Tools",
-                            ProductId = 0
+                            Label = "Tools"
                         },
                         new
                         {
                             ProductTypeId = 4,
-                            Label = "Games",
-                            ProductId = 0
+                            Label = "Games"
                         },
                         new
                         {
                             ProductTypeId = 5,
-                            Label = "Music",
-                            ProductId = 0
+                            Label = "Music"
                         },
                         new
                         {
                             ProductTypeId = 6,
-                            Label = "Health",
-                            ProductId = 0
+                            Label = "Health"
                         },
                         new
                         {
                             ProductTypeId = 7,
-                            Label = "Outdoors",
-                            ProductId = 0
+                            Label = "Outdoors"
                         },
                         new
                         {
                             ProductTypeId = 8,
-                            Label = "Beauty",
-                            ProductId = 0
+                            Label = "Beauty"
                         },
                         new
                         {
                             ProductTypeId = 9,
-                            Label = "Shoes",
-                            ProductId = 0
+                            Label = "Shoes"
                         },
                         new
                         {
                             ProductTypeId = 10,
-                            Label = "Automotive",
-                            ProductId = 0
+                            Label = "Automotive"
                         });
                 });
 
@@ -605,13 +591,6 @@ namespace Bangazon.Migrations
                         .WithMany("Products")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Bangazon.Models.ProductType", b =>
-                {
-                    b.HasOne("Bangazon.Models.ProductTypeViewModels.ProductTypeViewModel")
-                        .WithMany("ProductTypes")
-                        .HasForeignKey("ProductTypeViewModelProductTypeId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
