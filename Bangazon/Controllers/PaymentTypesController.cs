@@ -7,48 +7,55 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Bangazon.Data;
 using Bangazon.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace Bangazon.Controllers
 {
+    [Authorize]
     public class PaymentTypesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public PaymentTypesController(ApplicationDbContext context)
+        public PaymentTypesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: PaymentTypes
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.PaymentType.Include(p => p.User);
+            var user = await GetUserAsync();
+            var applicationDbContext = _context.PaymentType
+                .Where(p => p.UserId == user.Id)
+                .Include(p => p.User);
             return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: PaymentTypes/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //public async Task<IActionResult> Details(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var paymentType = await _context.PaymentType
-                .Include(p => p.User)
-                .FirstOrDefaultAsync(m => m.PaymentTypeId == id);
-            if (paymentType == null)
-            {
-                return NotFound();
-            }
+        //    var paymentType = await _context.PaymentType
+        //        .Include(p => p.User)
+        //        .FirstOrDefaultAsync(m => m.PaymentTypeId == id);
+        //    if (paymentType == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return View(paymentType);
-        }
+        //    return View(paymentType);
+        //}
 
         // GET: PaymentTypes/Create
         public IActionResult Create()
         {
-            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id");
             return View();
         }
 
@@ -155,6 +162,11 @@ namespace Bangazon.Controllers
         private bool PaymentTypeExists(int id)
         {
             return _context.PaymentType.Any(e => e.PaymentTypeId == id);
+        }
+
+        private Task<ApplicationUser> GetUserAsync()
+        {
+            return _userManager.GetUserAsync(HttpContext.User);
         }
     }
 }
