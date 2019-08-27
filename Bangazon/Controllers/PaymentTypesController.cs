@@ -9,6 +9,7 @@ using Bangazon.Data;
 using Bangazon.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using System.Net.Http;
 
 namespace Bangazon.Controllers
 {
@@ -81,7 +82,8 @@ namespace Bangazon.Controllers
 
             if(!wasCreatedByLoggedInUser)
             {
-                return Unauthorized();
+                //IF THE USER DID NOT CREATE THIS THEY ARE NOT ALLOWED TO ENTER THE PAGE
+                return NotFound();
             }
 
             return View(paymentType);
@@ -98,11 +100,13 @@ namespace Bangazon.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        //GETS CURRENT USER ID
         private Task<ApplicationUser> GetUserAsync()
         {
             return _userManager.GetUserAsync(HttpContext.User);
         }
 
+        //CHECKS TO SEE IF PAYMENT TYPE IS EQUAL TO CURRENT USER
         private async Task<bool> WasCreatedByUser(PaymentType paymentType)
         {
             var user = await GetUserAsync();
