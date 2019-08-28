@@ -36,16 +36,8 @@ namespace Bangazon.Controllers
                 .Where(p => p.UserId == user.Id)
                 .Include(p => p.User)
                 .Include(p => p.ProductType);
-            if (user == null)
-            {
-                return View(await applicationDbContext.ToListAsync());
-                //return NotFound();
-            }
-            else
-            {
-                return View(await applicationDbContext.ToListAsync());
-            }
 
+                return View(await applicationDbContext.ToListAsync());
         }
 
 
