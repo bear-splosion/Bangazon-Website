@@ -13,7 +13,6 @@
                 <br />
                 @foreach (var productItem in item.Products)
                 {
-                            @*@Html.ActionLink(modelItem => productItem.Title)*@
                             @Html.ActionLink(productItem.Title, "Details", new { id = productItem.ProductId})
                             <br />
                 }
