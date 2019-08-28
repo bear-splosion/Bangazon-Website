@@ -57,20 +57,23 @@ namespace Bangazon.Controllers
                 return NotFound();
             }
 
+            IEnumerable<int> boughtCount = from count in _context.OrderProduct
+                                           where count.ProductId == id
+                                           select count.ProductId;
 
 
-           
-
-             
+            var boughtCountNum = boughtCount.Count();
 
 
-             var product = await _context.Product
-                .Include(p => p.ProductType)
-                .Include(p => p.User)
-                .FirstOrDefaultAsync(m => m.ProductId == id);
 
-            /*product.Quantity -= purchasedCount;*/
 
+
+            var product = await _context.Product
+           .Include(p => p.ProductType)
+           .Include(p => p.User)
+           .FirstOrDefaultAsync(m => m.ProductId == id);
+
+            product.Quantity -= boughtCountNum;
             if (product == null)
             {
                 return NotFound();
