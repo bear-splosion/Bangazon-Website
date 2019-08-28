@@ -215,6 +215,6 @@ namespace Bangazon.Data {
             );
         }
 
-        public DbSet<Bangazon.Models.ProductTypeViewModels.ProductTypeViewModel> ProductTypeViewModel { get; set; }
+       
     }
 }
