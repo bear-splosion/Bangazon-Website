@@ -85,6 +85,14 @@
                 <br />
                 <a asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
             </td>
+            <td>
+                @*<form asp-controller="Product" asp-action="SearchProducts">
+                    <p>
+                        Search: <input type="text" name="SearchString">
+                        <input type="submit" value="Search" />
+                    </p>
+                </form>*@
+            </td>
         </tr>
 }
     </tbody>
