@@ -46,10 +46,20 @@ namespace Bangazon.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Product
+
+
+           
+
+             
+
+
+             var product = await _context.Product
                 .Include(p => p.ProductType)
                 .Include(p => p.User)
                 .FirstOrDefaultAsync(m => m.ProductId == id);
+
+            /*product.Quantity -= purchasedCount;*/
+
             if (product == null)
             {
                 return NotFound();

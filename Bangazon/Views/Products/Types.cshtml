@@ -12,34 +12,34 @@
 <table class="table">
     <thead>
         @*<tr>
-            <th>
-                @Html.DisplayNameFor(model => model.GroupedProducts)
-            </th>
-            <th></th>
-        </tr>*@
+                <th>
+                    @Html.DisplayNameFor(model => model.GroupedProducts)
+                </th>
+                <th></th>
+            </tr>*@
     </thead>
     <tbody>
         @foreach (var item in Model.GroupedProducts)
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.TypeName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductCount)
-            </td>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TypeName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductCount)
+                </td>
 
-            <td>
-                @foreach (var productItem in item.Products)
-                {
-                    <ul>
-                        <li>
-                            @Html.DisplayFor(modelItem => productItem.Title)
-                        </li>
-                    </ul>
-                }
-            </td>
-        </tr>
+                <td>
+                    @foreach (var productItem in item.Products)
+                    {
+                        <ul>
+                            <li>
+                                @Html.DisplayFor(modelItem => productItem.Title)
+                            </li>
+                        </ul>
+                    }
+                </td>
+            </tr>
         }
         <tr>
             <td>

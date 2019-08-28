@@ -8,7 +8,7 @@ namespace Bangazon.Models
 {
     public class Product
     {
-        [Key]
+        [Key]  
         public int ProductId {get;set;}
 
         [Required]
