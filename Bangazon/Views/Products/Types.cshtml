@@ -1,60 +1,26 @@
 ﻿@model Bangazon.Models.ProductTypeViewModels.ProductTypeViewModel
 
-@{
-    ViewData["Title"] = "Types";
-}
+<h1>Product Categories</h1>
 
-<h1>Product Types</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
-    <thead>
-        @*<tr>
-            <th>
-                @Html.DisplayNameFor(model => model.GroupedProducts)
-            </th>
-            <th></th>
-        </tr>*@
-    </thead>
     <tbody>
         @foreach (var item in Model.GroupedProducts)
         {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.TypeName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductCount)
-            </td>
 
-            <td>
+               (@Html.DisplayFor(modelItem => item.ProductCount))
+                <br />
                 @foreach (var productItem in item.Products)
                 {
-                    <ul>
-                        <li>
-                            @Html.DisplayFor(modelItem => productItem.Title)
-                        </li>
-                    </ul>
+                            @*@Html.ActionLink(modelItem => productItem.Title)*@
+                            @Html.ActionLink(productItem.Title, "Details", new { id = productItem.ProductId})
+                            <br />
                 }
             </td>
+
         </tr>
         }
-        <tr>
-            <td>
-                @*<a asp-action="Edit" asp-route-id="@item.ProductTypeId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.ProductTypeId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.ProductTypeId">Delete</a>*@
-            </td>
-        </tr>
-        @*foreach (var productItem in item.Products)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => productItem.Title)
-                    </td>
-                </tr>
-            }*@
     </tbody>
 </table>
