@@ -241,5 +241,23 @@ namespace Bangazon.Controllers
             return _userManager.GetUserAsync(HttpContext.User);
         }
         // End
+
+
+
+
+        //search bar method for finding products
+                    public async Task<IActionResult> SearchProducts(string searchString)
+        {
+
+            var products = from p in _context.Product
+                           select p;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                products = products.Where(p => p.Title.Contains(searchString));
+            }
+
+            return View(await products.ToListAsync());
+        }
     }
 }
