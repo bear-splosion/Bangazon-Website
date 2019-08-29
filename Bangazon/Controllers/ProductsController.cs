@@ -116,6 +116,7 @@ namespace Bangazon.Controllers
                     _context.Add(product);
 
                     await _context.SaveChangesAsync();
+
                     int integer = product.ProductId;
 
                     return RedirectToAction(nameof(Details), new { id = integer });
