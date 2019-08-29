@@ -29,6 +29,21 @@ namespace Bangazon.Controllers
         {
             var user = await GetUserAsync();
 
+            //var model = new OrderDetailViewModel();
+
+            //model.OrderProduct = await (
+            //    from o in _context.Order
+            //    join op in _context.Order
+            //    on o.OrderId equals op.OrderId
+            //    select new OrderProduct
+            //    {
+
+            //    }
+
+            //    )
+
+
+
             var applicationDbContext = _context.Order
                 .Where(o => o.UserId == user.Id)
                 .Include(o => o.PaymentType)
