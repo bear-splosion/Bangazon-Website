@@ -107,13 +107,19 @@ namespace Bangazon.Controllers
             ModelState.Remove("User");
             ModelState.Remove("UserId");
 
-            if (ModelState.IsValid)
+            if (ModelState.IsValid) 
             {
                     product.UserId = user.Id;
 
+                   
+
                     _context.Add(product);
+
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+
+                    int integer = product.ProductId;
+
+                    return RedirectToAction(nameof(Details), new { id = integer });
             }
             var productTypeList = new SelectList(_context.ProductType, "ProductTypeId", "Label", product.ProductTypeId);
             
