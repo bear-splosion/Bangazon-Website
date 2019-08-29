@@ -47,7 +47,12 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">View Cart</a>
                         </li>
-
+                        @*search bar for products*@
+                        <li>
+                            <form asp-controller="Products" asp-action="SearchProducts">
+                                <input type="text" placeholder="Search Products" name="SearchString">
+                            </form>
+                        </li>
                     </ul>
                 </div>
             </div>
