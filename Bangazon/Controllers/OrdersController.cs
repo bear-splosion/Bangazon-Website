@@ -29,27 +29,19 @@ namespace Bangazon.Controllers
         {
             var user = await GetUserAsync();
 
-            //var model = new OrderDetailViewModel();
-
-            //model.OrderProduct = await (
-            //    from o in _context.Order
-            //    join op in _context.Order
-            //    on o.OrderId equals op.OrderId
-            //    select new OrderProduct
-            //    {
-
-            //    }
-
-            //    )
-
-
-
             var applicationDbContext = _context.Order
                 .Where(o => o.UserId == user.Id)
-                .Include(o => o.PaymentType)
-                .Include(o => o.User);
+                .Include(o => o.OrderProducts)
+                .Where(o => o.DateCompleted == null);
             return View(await applicationDbContext.ToListAsync());
         }
+
+        //    var applicationDbContext = _context.Order
+        //        .Where(o => o.UserId == user.Id)
+        //        .Include(o => o.PaymentType)
+        //        .Include(o => o.User);
+        //    return View(await applicationDbContext.ToListAsync());
+        //}
 
         // GET: Orders/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -163,6 +155,8 @@ namespace Bangazon.Controllers
             var order = await _context.Order
                 .Include(o => o.PaymentType)
                 .Include(o => o.User)
+                .Include(o =>o.OrderProducts)
+                .ThenInclude(op => op.Order)
                 .FirstOrDefaultAsync(m => m.OrderId == id);
             if (order == null)
             {
@@ -177,7 +171,10 @@ namespace Bangazon.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var order = await _context.Order.FindAsync(id);
+            var orderedProducts = _context.OrderProduct.Where(o => o.OrderId == id);
+
+            var order = await _context.Order.FirstOrDefaultAsync(o => o.OrderId == id);
+            _context.OrderProduct.RemoveRange(orderedProducts);
             _context.Order.Remove(order);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
