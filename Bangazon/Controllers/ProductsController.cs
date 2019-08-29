@@ -245,8 +245,6 @@ namespace Bangazon.Controllers
         //search bar method for finding products
                     public async Task<IActionResult> SearchProducts(string searchString)
         {
-            //var applicationDbContext = _context.Product.Include(p => p.ProductType).Include(p => p.User);
-            //return View(await applicationDbContext.ToListAsync());
 
             var products = from p in _context.Product
                            select p;
