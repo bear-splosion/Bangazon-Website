@@ -252,7 +252,7 @@ namespace Bangazon.Controllers
 
 
         //search bar method for finding products
-                    public async Task<IActionResult> SearchProducts(string searchString)
+       public async Task<IActionResult> SearchProducts(string searchString)
         {
 
             var products = from p in _context.Product
@@ -260,7 +260,7 @@ namespace Bangazon.Controllers
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                products = products.Where(p => p.Title.Contains(searchString));
+                products = products.Where(p => p.Title.Contains(searchString) || p.City.Contains(searchString));
             }
 
             return View(await products.ToListAsync());
