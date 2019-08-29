@@ -25,9 +25,10 @@ namespace Bangazon.Controllers
         }
         // End
 
-        // GET: Products
+        // GET: All Products that User is selling 
         public async Task<IActionResult> Index()
         {
+            
             // Heather added GetUserAsync method for getting current user
             var user = await GetUserAsync();
             // Heather updated this section below for getting current user
@@ -35,8 +36,10 @@ namespace Bangazon.Controllers
                 .Where(p => p.UserId == user.Id)
                 .Include(p => p.User)
                 .Include(p => p.ProductType);
-            return View(await applicationDbContext.ToListAsync());
+
+                return View(await applicationDbContext.ToListAsync());
         }
+
 
         // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)
