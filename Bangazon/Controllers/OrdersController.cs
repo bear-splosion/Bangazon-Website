@@ -44,6 +44,13 @@ namespace Bangazon.Controllers
                 return NotFound();
             }
 
+            IEnumerable<int> boughtCount = from count in _context.OrderProduct
+                                           where count.OrderId == id
+                                           select count.ProductId;
+
+
+            var boughtCountNum = boughtCount.Count();
+
             var order = await _context.Order
                 .Include(o => o.PaymentType)
                 .Include(o => o.User)
@@ -54,6 +61,8 @@ namespace Bangazon.Controllers
                 //.Include(o => o.User)
                 //.ThenInclude(p => p.Products)
                 .FirstOrDefaultAsync(m => m.OrderId == id);
+
+            ViewData["OrderProductCount"] = boughtCountNum;
             if (order == null)
             {
                 return NotFound();
