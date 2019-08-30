@@ -25,10 +25,9 @@ namespace Bangazon.Controllers
         }
         // End
 
-        // GET: All Products that User is selling 
+        // GET: Products
         public async Task<IActionResult> Index()
         {
-            
             // Heather added GetUserAsync method for getting current user
             var user = await GetUserAsync();
             // Heather updated this section below for getting current user
@@ -36,10 +35,8 @@ namespace Bangazon.Controllers
                 .Where(p => p.UserId == user.Id)
                 .Include(p => p.User)
                 .Include(p => p.ProductType);
-
-                return View(await applicationDbContext.ToListAsync());
+            return View(await applicationDbContext.ToListAsync());
         }
-
 
         // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -107,19 +104,13 @@ namespace Bangazon.Controllers
             ModelState.Remove("User");
             ModelState.Remove("UserId");
 
-            if (ModelState.IsValid) 
+            if (ModelState.IsValid)
             {
                     product.UserId = user.Id;
 
-                   
-
                     _context.Add(product);
-
                     await _context.SaveChangesAsync();
-
-                    int integer = product.ProductId;
-
-                    return RedirectToAction(nameof(Details), new { id = integer });
+                    return RedirectToAction(nameof(Index));
             }
             var productTypeList = new SelectList(_context.ProductType, "ProductTypeId", "Label", product.ProductTypeId);
             
@@ -181,6 +172,61 @@ namespace Bangazon.Controllers
             ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", product.UserId);
             return View(product);
         }
+          public async Task<IActionResult> Restock(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var product = await _context.Product.FindAsync(id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            ViewData["ProductTypeId"] = new SelectList(_context.ProductType, "ProductTypeId", "Label", product.ProductTypeId);
+            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", product.UserId);
+            return View(product);
+        }
+
+        // POST: Products/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Restock(int id, [Bind("ProductId,DateCreated,Description,Title,Price,Quantity,UserId,City,ImagePath,Active,ProductTypeId")] Product product)
+        {
+
+            
+if (id != product.ProductId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(product);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ProductExists(product.ProductId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["ProductTypeId"] = new SelectList(_context.ProductType, "ProductTypeId", "Label", product.ProductTypeId);
+            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", product.UserId);
+            return View(product);
+        }
 
         // GET: Products/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -201,6 +247,7 @@ namespace Bangazon.Controllers
 
             return View(product);
         }
+
 
         // POST: Products/Delete/5
         [HttpPost, ActionName("Delete")]
@@ -247,23 +294,5 @@ namespace Bangazon.Controllers
             return _userManager.GetUserAsync(HttpContext.User);
         }
         // End
-
-
-
-
-        //search bar method for finding products
-       public async Task<IActionResult> SearchProducts(string searchString)
-        {
-
-            var products = from p in _context.Product
-                           select p;
-
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                products = products.Where(p => p.Title.Contains(searchString) || p.City.Contains(searchString));
-            }
-
-            return View(await products.ToListAsync());
-        }
     }
 }
