@@ -9,6 +9,8 @@ using Bangazon.Data;
 using Bangazon.Models;
 using Bangazon.Models.ProductTypeViewModels;
 using Microsoft.AspNetCore.Identity;
+using System.IO;
+using Microsoft.AspNetCore.Http;
 
 namespace Bangazon.Controllers
 {
@@ -101,8 +103,16 @@ namespace Bangazon.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductId,Description,Title,Price,Quantity,UserId,City,ImagePath,Active,ProductTypeId")] Product product)
+        public async Task<IActionResult> Create([Bind("ProductId,Description,Title,Price,Quantity,UserId,City,ImagePath,Active,ProductTypeId")] Product product, IFormFile file)
         {
+            var path = Path.Combine(
+                Directory.GetCurrentDirectory(), "wwwroot", "Images", file.FileName);
+
+            using (var stream = new FileStream(path, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
             var user = await GetUserAsync();
             ModelState.Remove("User");
             ModelState.Remove("UserId");
@@ -110,10 +120,10 @@ namespace Bangazon.Controllers
             if (ModelState.IsValid) 
             {
                     product.UserId = user.Id;
+                    product.ImagePath = "Images/" + file.FileName;
 
-                   
 
-                    _context.Add(product);
+                _context.Add(product);
 
                     await _context.SaveChangesAsync();
 
