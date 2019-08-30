@@ -24,7 +24,7 @@ namespace Bangazon.Controllers
         }
         // End
 
-        // GET: Orders
+        // GET: Orders Completed
         public async Task<IActionResult> Index()
         {
             var user = await GetUserAsync();
@@ -32,18 +32,11 @@ namespace Bangazon.Controllers
             var applicationDbContext = _context.Order
                 .Where(o => o.UserId == user.Id)
                 .Include(o => o.OrderProducts)
-                .Where(o => o.DateCompleted == null);
+                .Where(o => o.DateCompleted != null);
             return View(await applicationDbContext.ToListAsync());
         }
 
-        //    var applicationDbContext = _context.Order
-        //        .Where(o => o.UserId == user.Id)
-        //        .Include(o => o.PaymentType)
-        //        .Include(o => o.User);
-        //    return View(await applicationDbContext.ToListAsync());
-        //}
-
-        // GET: Orders/Details/5
+        // GET: Orders Completed/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -51,10 +44,25 @@ namespace Bangazon.Controllers
                 return NotFound();
             }
 
+            IEnumerable<int> boughtCount = from count in _context.OrderProduct
+                                           where count.OrderId == id
+                                           select count.ProductId;
+
+
+            var boughtCountNum = boughtCount.Count();
+
             var order = await _context.Order
                 .Include(o => o.PaymentType)
                 .Include(o => o.User)
+                .Include(o => o.OrderProducts)
+                .ThenInclude(op => op.Product)
+
+                //.Include(o => o.PaymentType)
+                //.Include(o => o.User)
+                //.ThenInclude(p => p.Products)
                 .FirstOrDefaultAsync(m => m.OrderId == id);
+
+            ViewData["OrderProductCount"] = boughtCountNum;
             if (order == null)
             {
                 return NotFound();
