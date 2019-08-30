@@ -119,13 +119,9 @@ namespace Bangazon.Controllers
                     product.UserId = user.Id;
                     product.ImagePath = "Images/" + file.FileName;
 
-<<<<<<< HEAD
-                    _context.Add(product);
-=======
 
                 _context.Add(product);
 
->>>>>>> master
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
             }
