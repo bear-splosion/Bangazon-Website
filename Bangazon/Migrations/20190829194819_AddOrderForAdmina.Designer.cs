@@ -4,14 +4,16 @@ using Bangazon.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Bangazon.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190829194819_AddOrderForAdmina")]
+    partial class AddOrderForAdmina
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -83,7 +85,7 @@ namespace Bangazon.Migrations
                         {
                             Id = "00000000-ffff-ffff-ffff-ffffffffffff",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "da421310-7ead-4918-8b76-9f57b37966c2",
+                            ConcurrencyStamp = "83592d47-b723-407a-ab2d-3fed1a402ee9",
                             Email = "admin@admin.com",
                             EmailConfirmed = true,
                             FirstName = "Admina",
@@ -91,7 +93,7 @@ namespace Bangazon.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAELyEOx1uec3zFbOSUyUS0mnC7XMT1rCoY3hX10MLnKdv3rtR7aAk8nsbItb25u6cSQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEIBro698gktva5Y2HesGCW7fnN+jyXANkiRPwNWZU1Wis4OLPgHoDbbgndWIHHuLQg==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "7f434309-a4d9-48e9-9ebb-8803db794577",
                             StreetAddress = "123 Infinity Way",
