@@ -117,7 +117,7 @@ namespace Bangazon.Controllers
             if (ModelState.IsValid)
             {
                     product.UserId = user.Id;
-                    product.ImagePath = "Images/" + file.FileName;
+                product.ImagePath = "Images/" + file.FileName;
 
 
                 _context.Add(product);
